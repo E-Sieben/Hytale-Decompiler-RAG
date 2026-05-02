@@ -1,15 +1,44 @@
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
+const (
+	DependenciesDir = "dependencies"
+	CodeDir         = "code"
+)
+
 func main() {
-	wantsRAG := true // Ask the User if they want to deploy RAG aswell
+	wantsRAG := askYesNo("Do you want to setup the RAG server? (requires Docker)")
+	wantsPrerelease := askYesNo("Do you want to use the pre-release channel?")
+
 	status := NewDependencyStatus()
-	DownloadMissingDependencies(*status)
+	DownloadMissingDependencies(status, wantsPrerelease)
 	decompile()
-	flatten()
+	pruneToHypixel()
 	strip()
+	addJavadoc(wantsPrerelease)
+	zipSourceCode()
 	if status.HasAllDependencies() && wantsRAG {
-		// TODO: Use go:embed to write out the Dockerfile, docker-compose.yml, pyproject.toml,
-		// and mcp_rag.py to a hidden/local directory, then triggers docker-compose to build and start the RAG server.
 		deployRAG()
+	}
+}
+
+func askYesNo(prompt string) bool {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Printf("%s [y/n]: ", prompt)
+		line, _ := reader.ReadString('\n')
+		switch strings.TrimSpace(strings.ToLower(line)) {
+		case "y", "yes":
+			return true
+		case "n", "no":
+			return false
+		}
+		fmt.Println("Please enter 'y' or 'n'.")
 	}
 }
