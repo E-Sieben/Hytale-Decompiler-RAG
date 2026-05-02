@@ -1,0 +1,12 @@
+services:
+  hytale-rag:
+    build: ../hytale-mcp-rag
+    container_name: hytale-mcp-container
+    volumes:
+      - ./hytale_src:/app/hytale_src:ro
+      - chroma_data:/app/chroma_db
+    stdin_open: true
+    tty: true
+
+volumes:
+  chroma_data:

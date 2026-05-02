@@ -1,0 +1,10 @@
+[project]
+name = "hytale-decompiler-rag"
+version = "2026.5.001"
+requires-python = ">=3.11"
+dependencies = [
+    "chromadb",
+    "fastmcp",
+    "mcp",
+    "sentence-transformers",
+]
