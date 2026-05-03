@@ -63,15 +63,18 @@ volumes:
   qdrant_manifest:
 `, qdrantURL, qdrantKey, absCodeDirFwd)
 	} else {
+		// Local mode: run the HTTP server as the main process (port 8080 for the web client).
+		// MCP connections still work via `docker exec -i ... uv run mcp_rag.py` (no args = MCP mode).
 		composeContent = fmt.Sprintf(`services:
   hytale-rag:
     build: .
     container_name: hytale-mcp-container
+    command: ["uv", "run", "mcp_rag.py", "serve-http"]
+    ports:
+      - "8080:8080"
     volumes:
       - %s:/app/hytale_src:ro
       - chroma_data:/app/chroma_db
-    stdin_open: true
-    tty: true
 
 volumes:
   chroma_data:

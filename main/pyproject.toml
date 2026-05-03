@@ -8,4 +8,6 @@ dependencies = [
     "mcp",
     "sentence-transformers",
     "qdrant-client",
+    "fastapi",
+    "uvicorn[standard]",
 ]

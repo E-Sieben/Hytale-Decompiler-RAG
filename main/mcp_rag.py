@@ -42,27 +42,32 @@ else:
 mcp = FastMCP("HytaleRAG")
 
 
-@mcp.tool()
-def search_hytale_code(query: str, n_results: int = 5) -> str:
-    """Search the decompiled Hytale server codebase for relevant Java context."""
+def _search_results(query: str, n_results: int = 5) -> list[dict]:
+    """Returns structured search results for both the MCP tool and the HTTP endpoint."""
     if RAG_BACKEND == "qdrant":
         embedding = _embedder.encode([query])[0].tolist()
         hits = _qdrant.query_points(_COLLECTION, query=embedding, limit=n_results, with_payload=True).points
-        if not hits:
-            return "No matching Hytale code found."
-        return "".join(
-            f"--- File: {h.payload.get('filepath', 'Unknown')} ---\n{h.payload.get('text', '')}\n\n"
+        return [
+            {"filepath": h.payload.get("filepath", ""), "content": h.payload.get("text", ""), "score": h.score}
             for h in hits
-        )
+        ]
     else:
         results = _collection.query(query_texts=[query], n_results=n_results)
         if not results["documents"] or not results["documents"][0]:
-            return "No matching Hytale code found."
-        context = ""
-        for i, doc in enumerate(results["documents"][0]):
-            meta = results["metadatas"][0][i]
-            context += f"--- File: {meta.get('filepath', 'Unknown')} ---\n{doc}\n\n"
-        return context
+            return []
+        return [
+            {"filepath": results["metadatas"][0][i].get("filepath", ""), "content": doc, "score": None}
+            for i, doc in enumerate(results["documents"][0])
+        ]
+
+
+@mcp.tool()
+def search_hytale_code(query: str, n_results: int = 5) -> str:
+    """Search the decompiled Hytale server codebase for relevant Java context."""
+    results = _search_results(query, n_results)
+    if not results:
+        return "No matching Hytale code found."
+    return "".join(f"--- File: {r['filepath']} ---\n{r['content']}\n\n" for r in results)
 
 
 def _chunks(text: str) -> list[str]:
@@ -173,8 +178,32 @@ def ingest_code(directory: str):
         _ingest_chroma(directory)
 
 
+def _serve_http(host: str = "0.0.0.0", port: int = 8080) -> None:
+    """Expose search over HTTP so the web client can reach a local Docker deployment."""
+    from fastapi import FastAPI, Query as QParam
+    from fastapi.middleware.cors import CORSMiddleware
+    import uvicorn
+
+    app = FastAPI(title="Hytale RAG HTTP")
+    app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["GET"], allow_headers=["*"])
+
+    @app.get("/search")
+    def search_endpoint(q: str = QParam(..., description="Search query"), n: int = 5):
+        return {"results": _search_results(q, n)}
+
+    @app.get("/health")
+    def health():
+        return {"status": "ok", "backend": RAG_BACKEND}
+
+    print(f"HTTP RAG server listening on {host}:{port}")
+    uvicorn.run(app, host=host, port=port)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "ingest":
+    cmd = sys.argv[1] if len(sys.argv) > 1 else ""
+    if cmd == "ingest":
         ingest_code("/app/hytale_src")
+    elif cmd == "serve-http":
+        _serve_http()
     else:
         mcp.run()
