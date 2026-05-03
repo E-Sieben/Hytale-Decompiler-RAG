@@ -85,4 +85,7 @@ For Qdrant-Usage
 
 # WARNING
 
-This is objectively speaking AI-slopware
+This Software is objectively speaking AI-slopware
+This Software does not provide any safety, except for vercel and qdrant being it's target cloud architecture
+This Software is intended for local development and not for unsupervised AI Code runners
+This Software is best used as a Search Engine, AI Code generation is prone to hallucination and over-personalisation of systems
