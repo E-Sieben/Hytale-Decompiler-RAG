@@ -3,6 +3,11 @@
 This project provides you with a .exe (Windows) or binary (Linux) to Auto-Download and Decompile the Hytale Server Jar,
 with Javadocs. It also provides you with the ability to add RAG support to your AI.
 
+# Easy Usage
+
+Visit [this link](https://hytale-decompiler-rag.vercel.app/) for access to a public "search engine"
+This runs a tiny model in your browser providing (More flexability -> Less Power), especially good for folks with weak machines
+
 # Prerequisites
 
 - Eight Gigs of RAM
@@ -20,7 +25,7 @@ with Javadocs. It also provides you with the ability to add RAG support to your 
 7. If you said yes to `Setup RAG` you can now add the [JSON Config](#MCP-JSON) to your AI of choosing
 
 # MCP-JSON
-
+For local Docker usage
 ```JSON
 {
   "mcpServers": {
@@ -34,6 +39,29 @@ with Javadocs. It also provides you with the ability to add RAG support to your 
         "run",
         "mcp_rag.py"
       ]
+    }
+  }
+}
+```
+For Qdrant-Usage
+```JSON
+{
+  "mcpServers": {
+    "HytaleRAG": {
+      "command": "your\\path\\to\\uv.exe",
+      "args": [
+        "run",
+        "--project",
+        "your\\path\\to\\main",
+        "python",
+        "your\\path\\to\\mcp_rag.py"
+      ],
+      "cwd": "path\\to\\you\\work\\directory",
+      "env": {
+        "RAG_BACKEND": "qdrant",
+        "QDRANT_URL": "your_endpoint_url.cloud.qdrant.io",
+        "QDRANT_API_KEY": "your_api_key"
+      }
     }
   }
 }
