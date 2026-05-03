@@ -1,7 +1,10 @@
 # Hytale decompiler with RAG support
 
-This project provides you with a .exe (Windows) or binary (Linux) to Auto-Download and Decompile the Hytale Server Jar,
-with Javadocs. It also provides you with the ability to add RAG support to your AI.
+This project provides the following Hytale Server code features:
+- Code decompilation with JavaDocs
+- Web search Engine
+- Local RAG MCP
+- Qdrant RAG MCP
 
 # Easy Usage
 
