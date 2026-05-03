@@ -9,6 +9,7 @@ This project provides the following Hytale Server code features:
 # Easy Usage
 
 Visit [this link](https://hytale-decompiler-rag.vercel.app/) for access to a public "search engine"
+
 This runs a tiny model in your browser providing (More flexability -> Less Power), especially good for folks with weak machines
 
 # Prerequisites
@@ -85,7 +86,7 @@ For Qdrant-Usage
 
 # WARNING
 
-This Software is objectively speaking AI-slopware
-This Software does not provide any safety, except for vercel and qdrant being it's target cloud architecture
-This Software is intended for local development and not for unsupervised AI Code runners
-This Software is best used as a Search Engine, AI Code generation is prone to hallucination and over-personalisation of systems
+- This Software is objectively speaking AI-slopware
+- This Software does not provide any safety, except for vercel and qdrant being it's target cloud architecture
+- This Software is intended for local development and not for unsupervised AI Code runners
+- This Software is best used as a Search Engine, AI Code generation is prone to hallucination and over-personalisation of systems
