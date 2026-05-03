@@ -1,6 +1,6 @@
 services:
   hytale-rag:
-    build: ../hytale-mcp-rag
+    build: ../../hytale-mcp-rag
     container_name: hytale-mcp-container
     volumes:
       - ./hytale_src:/app/hytale_src:ro

@@ -7,4 +7,5 @@ dependencies = [
     "fastmcp",
     "mcp",
     "sentence-transformers",
+    "qdrant-client",
 ]
