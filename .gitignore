@@ -9,3 +9,6 @@ build/
 # Python
 .venv
 main/uv.lock
+
+# MCP
+.egg-info
