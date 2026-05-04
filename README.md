@@ -28,6 +28,36 @@ This runs a tiny model in your browser providing (More flexability -> Less Power
 6. Wait a bit decompilation takes a while
 7. If you said yes to `Setup RAG` you can now add the [JSON Config](#MCP-JSON) to your AI of choosing
 
+# CLI Flags
+
+All flags are optional. When a flag is omitted the program asks interactively instead.
+
+| Flag                      | Description                                              |
+|---------------------------|----------------------------------------------------------|
+| `--rag`                   | Set up the RAG server (requires Docker)                  |
+| `--no-rag`                | Skip RAG server setup                                    |
+| `--prerelease`            | Use the pre-release channel                              |
+| `--no-prerelease`         | Use the stable release channel                           |
+| `--redownload-jar`        | Re-download `HytaleServer.jar` even if it already exists |
+| `--no-redownload-jar`     | Keep the existing `HytaleServer.jar` without prompting   |
+| `--qdrant`                | Use Qdrant cloud instead of local ChromaDB               |
+| `--no-qdrant`             | Use local ChromaDB (skip Qdrant)                         |
+| `--qdrant-endpoint <url>` | Qdrant cloud endpoint URL (implies `--qdrant`)           |
+| `--qdrant-key <key>`      | Qdrant API key (implies `--qdrant`)                      |
+
+`--qdrant` and `--no-qdrant` are only relevant when `--rag` is set.
+
+Credentials passed via `--qdrant-endpoint` / `--qdrant-key` are automatically saved to `credentials.json`
+next to the binary so you do not need to supply them again on the next run.
+
+**Fully non-interactive example:**
+
+```sh
+./Hytale-Decompiler-RAG --rag --no-prerelease --no-redownload-jar \
+  --qdrant-endpoint https://your-cluster.qdrant.io \
+  --qdrant-key YOUR_API_KEY
+```
+
 # MCP-JSON
 For local Docker usage
 ```JSON

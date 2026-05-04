@@ -13,8 +13,9 @@ import (
 	"strings"
 )
 
-// DownloadMissingDependencies handles the download of the Hytale Server Downloader and VineFlower if not present
-func DownloadMissingDependencies(status *DependencyStatus, wantsPrerelease bool) *DependencyStatus {
+// DownloadMissingDependencies handles the download of the Hytale Server Downloader and VineFlower if not present.
+// redownloadJar: nil = ask interactively, true = always redownload, false = never redownload.
+func DownloadMissingDependencies(status *DependencyStatus, wantsPrerelease bool, redownloadJar *bool) *DependencyStatus {
 	if !status.HasJava {
 		panic("No Java 25 install was found, please download at https://adoptium.net/temurin/releases")
 	}
@@ -43,7 +44,11 @@ func DownloadMissingDependencies(status *DependencyStatus, wantsPrerelease bool)
 
 	shouldDownloadJar := !status.HasHytaleJar
 	if status.HasHytaleJar {
-		shouldDownloadJar = askYesNo("HytaleServer.jar already exists. Re-download to update? (~1.4 GB)")
+		if redownloadJar != nil {
+			shouldDownloadJar = *redownloadJar
+		} else {
+			shouldDownloadJar = askYesNo("HytaleServer.jar already exists. Re-download to update? (~1.4 GB)")
+		}
 	}
 	if shouldDownloadJar {
 		fmt.Println("Downloading Hytale Server Jar...")
