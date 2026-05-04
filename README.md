@@ -111,7 +111,7 @@ For Qdrant-Usage
 4. Collapse Hierarchy (Delete everything except com.hypixel.hytale)
 5. Clean Up decompiled code.
 6. Add in Javadocs
-7. Zip up source code and put it accessible somewhere
+7. Package source code into `HytaleServer-source.jar`
 8. Spin up Docker (Reference the existing code)
 
 # WARNING

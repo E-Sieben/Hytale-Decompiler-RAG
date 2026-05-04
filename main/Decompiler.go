@@ -302,8 +302,8 @@ func extractClassDescription(html string) string {
 }
 
 func zipSourceCode() {
-	const dest = "HytaleServer-source.zip"
-	fmt.Println("Zipping source code...")
+	const dest = "HytaleServer-source.jar"
+	fmt.Println("Packaging source code into jar...")
 
 	out, err := os.Create(dest)
 	if err != nil {
@@ -337,7 +337,7 @@ func zipSourceCode() {
 	if err != nil {
 		panic(fmt.Sprintf("Failed to zip source code: %v", err))
 	}
-	fmt.Printf("Source code written to %s\n", dest)
+	fmt.Printf("Source jar written to %s\n", dest)
 }
 
 // createFilteredJar copies only entries whose name starts with prefix into a new jar.
